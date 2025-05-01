@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="../static/js/main.js" defer></script>
+    <!--Aqui los estilos-->
+    <style>
+        header{
+            background-color: #e8c39e;
+            padding: 2rem 1rem;
+
+        }
+        .nose{
+            color: red;
+        }
+        .mi-imagen {
+            max-width: 50px; /* La imagen no excederá el ancho del contenedor */
+      /* Mantiene la relación de aspecto */
+            display: block;  /* Evita que la imagen se "levante" del fondo */
+            margin: left;  /* Centra la imagen horizontalmente si hay espacio */
+        }
+
+    </style>
+
+ 
+</head>
+<body>
+
+    
+    <section class="section">
+        <!--El encabezado-->
+        <div class="container">
+            <h1 class="title has-text-black">Python-Flash-Mysql</h1> <!--ajusta en diferentes dispositivos -->
+                
+            <header class="mb-4">
+                <div class="columns is-vcentered">
+                    <!-- Columna para el logo -->
+                    <div class="column is-narrow">
+                        <img src="{{ url_for('static', filename='imagen/imagen.png') }}" alt="Descripción de la imagen" class="mi-imagen">
+                    </div>
+                    <!-- Columna para la navegación -->
+                    <div class="column is-narrow">
+                        <nav class="nose" role="navigation" aria-label="main navigation">
+                            <div class="navbar-menu">
+                                <div class="navbar-end">
+                                    <a class="navbar-item " href="/">Inicio</a>
+                                    <a class="navbar-item " href="/ranking">Ranking</a>
+                                    <a class="navbar-item has-text-black" href="/">Top autores</a>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+        </div>
+         <!--TABLA -->
+ <div class="table-container">
+    <h3>Total de libros: {{total_libros}}</h3>
+
+<!--Aqui comienza los filtros-->
+    <form action="/" method="GET">
+        <label for="genero"> Filtrar por géneros:</label>
+        <select name="genero" id="genero">
+             <option value="">Selecciona un género </option>
+            {% for genero in generos %}
+            <option value="{{genero[0]}}" {% if genero[0] == genero_selecionado %} selected{%endif%}>
+                {{genero[1]}}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <form action="/" method="GET">
+        <label for="autor"> Filtrar por géneros:</label>
+        <select name="autor" id="autor">
+             <option value="">Selecciona un autor </option>
+            {% for genero in generos %}
+            <option value="{{genero[0]}}" {% if genero[0] == genero_selecionado %} selected{%endif%}>
+                {{genero[1]}}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+
+
+    <!--Aqui comienza mi tabla-->
+         <table class="table is-striped is-hoverable is-fullwidth">
+            <thead>
+                <!-- Aqui quieor ver mis libros-->
+                <tr>
+                    <th>Libro</th>
+                    <th>Autor</th>
+                    <th>Género</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for libro in datos_libros %}
+                <tr>
+                    <td>{{libro[1]}}</td>
+                    <td>{{libro[2] }}</td>
+                    <td>{{libro[3] }}</td>
+                    <td>{{libro[4] }}</td>
+                    <td>
+                       <!-- <a href="{{url_for ('delete_book', book_id=libro[0]) }}" class="button is-danger is-small" onclick="confirmar_eliminacion({{ libro[0] }})">Eliminar baby</a>-->
+                        <a href="#" class="button is-danger is-small" onclick="confirmar_eliminacion('{{ libro[0] }}')">Eliminar baby</a>
+                    </td>
+                    <td>
+                        <a href="{{url_for ('edite_book', book_id=libro[0]) }}" class="button is-danger is-small" >Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>       
+    </div>
+    <div class="button">
+        <a class="button-is-primary is-light" href="agregar">Agregar</a>
+    </div>
+</section>
+
+<!--Pestaña emergemte-->
+<div class="modal" id="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <p>Decidme la verdad ¿En serio lo quieres borrar?</p>
+            <form id="delete-form" method="post" action="">
+                <button type="submit" class="button is-danger">Eliminar</button>
+                <button type="button" class="button" onclick="cerrar()">cancelar</button>
+            </form>
+        </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" onclick="cerrar()"></button>
+
+    </div>
+
+<script>
+    function confirmar_eliminacion(book_id) {
+        const actionUrl = "/delete/" + book_id;
+        console.log("Action URL:", actionUrl);  // Esto imprimirá la URL en la consola del navegador
+        document.getElementById('modal').classList.add('is-active');
+        document.getElementById('delete-form').action = actionUrl;
+}
+
+
+    function cerrar(){
+        document.getElementById("modal").classList.remove("is-active");
+    }
+</script>
+
+
+
+ 
+
+
+
+
+ 
+    
+        
+
+
+
+
+
+
+</body>
+</html>

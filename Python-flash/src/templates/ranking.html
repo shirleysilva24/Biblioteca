@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        header{
+            background-color: #e8c39e;
+            padding: 2rem 1rem;
+
+        }
+        .nose{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="title has-text-black">Python-Flash-Mysql</h1> <!--ajusta en diferentes dispositivos -->
+                
+            <header class="mb-4">
+                <div class="columns is-vcentered">
+                    <!-- Columna para el logo -->
+                    <div class="column is-narrow">
+                        <img src="/path/to/your/image.png" alt="Logo">
+
+                    </div>
+    
+                
+    
+                    <!-- Columna para la navegación -->
+                    <div class="column is-narrow">
+                        <nav class="nose" role="navigation" aria-label="main navigation">
+                            <div class="navbar-menu">
+                                <div class="navbar-end">
+                                    <a class="navbar-item " href="/">Inicio</a>
+                                    <a class="navbar-item " href="/ranking">Ranking</a>
+                                    <a class="navbar-item has-text-black" href="/">Top autores</a>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+        </div>
+
+        <!-- TABLA -->
+        <div class="table-container">
+            <h3>Total de libros: {{ total_libros}}</h3>
+                <table class="table is-striped is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Autor</th>
+                        <th>Nacionalidad</th>
+                        <th>Libro</th>
+                        <th>Estrellas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for libro_rank in ranking %}
+                    <tr>
+                        <td>{{ libro_rank[0] }}</td>
+                        <td>{{ libro_rank[1] }}</td>
+                        <td>{{ libro_rank[2] }}</td>
+                        <td>{{ libro_rank[3] }}</td>
+                        <td>
+                            <a href="{{ url_for('rankear', libro=libro_rank[4]) }}" class="button is-danger is-small">Rankear</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                   
+                    
+                </table>
+        </div>
+
+    
+</body>
+
+
+</html>

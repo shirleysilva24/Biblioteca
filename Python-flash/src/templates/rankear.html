@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="box">
+        <h2 class="subtitle">Rankear libro</h2>
+        <form action="{{ url_for('rankear', libro=libro) }}" method="POST">
+            <div class="field">
+                <label for="libro">Libro:</label>
+                <div class="control">
+                    <input type="text" id="libro" name="libro"   value="{{nombre_libro}}" readonly>
+                </div>
+            </div>
+        
+            <div class="field">
+                <label for="autor">Autor:</label>
+                <div class="control">
+                    <input type="text" id="autor" name="autor"  value="{{autor}}" required readonly>
+                </div>
+            </div>
+        
+            <div class="field">
+                <label for="fecha_inicio">Fecha Inicio:</label>
+                <div class="control">
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" class="input" >
+                </div>
+            </div>
+        
+            <div class="field">
+                <label for="fecha_final">Fecha Final:</label>
+                <div class="control">
+                    <input type="date" id="fecha_final" name="fecha_final" class="input" >
+                </div>
+            </div>
+        
+            <div class="field">
+                <label for="ranking">Ranking:</label>
+                <div class="control">
+                    <input type="number" id="ranking" name="ranking" class="input" min="1" max="5" required>
+                </div>
+            </div>
+        
+            <div class="field">
+                <label for="opinion">Opinión:</label>
+                <div class="control">
+                    <textarea id="opinion" name="opinion" class="textarea" required></textarea>
+                </div>
+            </div>
+
+            <!-- Para saber el estado actual-->
+            <div class="box">
+                <h3 class="subtitle" >Estado Actual</h3>
+                <p><strong>Fecha de Inicio:</strong> {{ estado_actual[0] or 'Sin iniciar' }}</p>
+                <p><strong>Fecha de Finalización:</strong> {{ estado_actual[1] or 'No finalizado' }}</p>
+                <p><strong>Ranking:</strong> {{estado_actual[2]}}</p>
+                <p><strong>Opinión:</strong> {{ estado_actual[3] or 'Sin opinión' }}</p>
+            </div>
+            
+        
+            <div class="control">
+                <button type="submit" class="button is-primary">Rankear</button>
+            </div>
+
+          
+        </form>
+        
+    </div>
+</body>
+</html>

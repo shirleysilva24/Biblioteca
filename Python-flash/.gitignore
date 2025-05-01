@@ -1,0 +1,6 @@
+# Ignorar el archivo con datos sensibles
+src/database.py
+
+# Ignorar la carpeta con archivos .sql
+../Mi Biblioteca/
+

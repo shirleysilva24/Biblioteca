@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar libro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style>
+        .notificacion{
+            display:none;
+            position: relative;
+            top:20px;
+            right: 20px;
+            background-attachment: fixed;
+            color: wheat;
+
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Editar Libro</h1>
+            <form id="edit-book-form" action="{{ url_for('edite_book',book_id=book[0]) }}" method="POST">
+                <div class="field">
+                    <label for="libro" class="obligatorio">Nombre</label>
+                    <div class="control">
+                        <input type="text" class="input is-small input-custom" name="libro" id="libro" value="{{book[5]}}" placeholder="Ingresa el nombre del Libro" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="autor" class="obligatorio">Autor</label>
+                    <div class="control">
+                        <input type="text" class="input is-small input-custom" name="autor" id="autor" value="{{ book[9]}}" placeholder="Ingresa el nombre del Autor" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="genero" class="label">Selecciona los géneros</label>
+                    <div class="control">
+                        <div class="select is-multiple">
+                            <select name="generos" multiple required>
+                                {% for row in generos %}
+                                <option value="{{row[0]}}" {% if row[0] in book_gender %} selected {% endif %}>{{ row[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="pagina" class="label">Pagina</label>
+                    <div class="control">
+                        <input type="text" class="input is-small input-custom" name="pagina" id="pagina" value="{{book[2]}}" placeholder="Ingresa el número de página">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="publicacion" class="label">Año de publicacion</label>
+                    <div class="control">
+                        <input type="text" class="input is-small input-custom" name="publicacion" id="publicacion" value="{{ book[4] }}" placeholder="Ingresa el año de Publicacion">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="editorial" class="label">Editorial</label>
+                    <div class="control">
+                        <input type="text" class="input is-small input-custom" name="editorial" id="editorial" value="{{book[-1]}}" placeholder="Ingresa la editorial">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="editorial" class="label">Imagen (URL)</label>
+                    <div class="control">
+                        <input type="text" class="input is-small input-custom" name="imagen" id="imagen" value="{{book[8]}}" placeholder="Ingresa el url de la imagen" oninput="ver_imagen()">
+                    </div>
+                    <img id="image-preview" class="image-preview" src="" alt="Vista previa de la imagen">
+                </div>
+
+                <div class="field">
+                    <label for="sipnosis" class="label">Sipnosis</label>
+                    <div class="control">
+                        <input type="text" class="input is-small input-custom" name="sipnosis" id="sipnosis" value="{{book[7]}}" placeholder="Ingresa la sipnosis">
+                    </div>
+                </div>
+
+
+                <div class="field">
+                    <label for="status" class="label">Estado</label>
+                    <div class="control">
+                        <div class="select is-small" >
+                            <select name="status" id="status" class="input-custom" required>
+                                <option value=" "> </option>
+                                <option value="Pendiente" {% if book[6] == "Pendiente" %} selected {% endif %}>Pendiente</option>
+                                <option value="Leido" {% if book[6] == "Leido" %} selected {% endif %}>Leido</option>
+                                <option value="Interesado" {% if book[6]== "Interesado" %} selected {% endif %}>Interesado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" class="button is-primary input-custom">Actualizar libro</button>
+                    </div>
+                </div>  
+            </form>
+        </div>
+    </section>
+
+    
+   
+
+    <script>
+        function ver_imagen(){
+            const imageUrl = document.getElementById('imagen').value;
+            const imagePreview = document.getElementById('image-preview');
+            imagePreview.src = imageUrl;
+        }
+
+        
+    </script>
+    
+</body>
+</html>

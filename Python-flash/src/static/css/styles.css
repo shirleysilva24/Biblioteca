@@ -1,0 +1,137 @@
+/* styles.css */
+
+
+
+body {
+  font: bold 16px/1.5 'Helvetica', sans-serif;
+  display:inline-flex;
+  justify-content: center;
+  height: 100vh  ;
+  background-color: #b1d1d6;
+}
+
+h1{
+  position: absolute;
+  justify-content: center;
+}
+
+.container{
+left:150px;
+top: 200px;
+}
+
+.grupo{
+margin-bottom: 60px;
+display:flexbox;
+padding-left: 20px;
+
+}
+
+label{
+margin-right: 30px;
+}
+
+/*
+
+input {
+position: absolute;
+outline: none;
+box-sizing: border-box;
+height: 50px;
+width: 0px;
+padding: 0 80px;
+ 
+border-radius: 50px;
+font-size: 16px;
+border: 2px solid #D50000;
+transition: all .7s ease;
+top: 50%;
+transform: translateY(-50%);
+margin-left: 10px;
+
+
+}
+
+
+::placeholder {
+color: grey;
+font: italic 16px "Helvetica", sans-serif;
+
+}
+/*
+.boton {
+position: absolute;
+right: -5px;
+top: -15px;
+width: 70px;
+height: 70px;
+background: #D50000;
+line-height: 70px;
+border-radius: 50%;
+text-align: center;
+cursor: pointer;
+transition: .5s;
+}
+
+.boton i {
+	font-size: 25px;
+	color: white;
+	line-height: 70px;
+	transition: all .7s ease;
+}
+
+.container:hover input {
+	width: 250px;
+}
+/*
+.container:hover i{
+	transform: rotate(-180deg);
+}
+
+.boton:hover{
+	background: #cc0000;
+}
+*/
+
+
+/*tabla*/
+.tabla{
+ margin-top:200px;
+ margin-left: 0px ;
+ margin-right: 0px ;
+ 
+ }
+
+thead{
+  background-color: #cc0000;
+}
+th{
+  padding: 30px 25px;
+  background-color: #f2f2f2;
+}
+
+td{
+  text-align: center;
+  font: 14px/1.5 'Helvetica', sans-serif;
+  padding: 20px 15px;
+
+}
+
+.styled-table{
+  border-collapse: collapse;
+  min-width: 700px;
+  box-shadow:  0 ,0 ,20px;
+}
+
+.styled-table tbody td{
+  border-bottom: 1px solid;
+}
+
+
+  
+
+
+
+
+
+ 

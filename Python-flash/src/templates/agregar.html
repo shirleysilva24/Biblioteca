@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="../static/css/agregar.css">-->
+    <title>Formulario</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .input-custom {
+            height: 30px; 
+            width: 600px;
+        }
+        .image-preview{
+            max-width:100% ;
+            max-height: 200px;
+            display: block;
+            margin-top: 10px;
+        }
+        .modal-content {
+            max-width: 400px; /* Cambia el tamaño según tus necesidades */
+            margin: auto;
+        }
+
+        .suggestions {
+            border: 1px solid #ccc;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+        .suggestion-item {
+            padding: 5px;
+            cursor: pointer;
+        }
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+
+</head>
+<body>
+
+    <section class="section" >   
+        <div class="container">
+            <h1 class="title has-text-centered">Formulario</h1>
+
+            <div class="box">
+                <h2 class="subtitle">Añadir</h2>
+                <form action="/procesar_datos" method="POST" onsubmit="return validacion()">
+                    <div class="field">
+                        <label for="libro" class="obligatorio">Nombre</label>
+                        <div class="control">
+                            <input type="text" class="input is-small input-custom" name="libro" id="libro" placeholder="Ingresa el nombre del Libro" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="autor" class="obligatorio">Autor</label>
+                        <div class="control">
+                            <input type="text" class="input is-small input-custom" name="autor" id="autor" placeholder="Ingresa el nombre del Autor" required>
+                            <div id="suggestions" class="suggestions"></div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="genero" class="label">Selecciona los géneros</label>
+                        <div class="control">
+                            <div class="select is-multiple">
+                                <select name="generos" multiple required>
+                                    {% for row in generos %}
+                                    <option value="{{row[0]}}">{{row[0]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="pagina" class="label">Pagina</label>
+                        <div class="control">
+                            <input type="text" class="input is-small input-custom" name="pagina" id="pagina" placeholder="Ingresa el número de página">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="publicacion" class="label">Año de publicacion</label>
+                        <div class="control">
+                            <input type="text" class="input is-small input-custom" name="publicacion" id="publicacion" placeholder="Ingresa el año de Publicacion">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="editorial" class="label">Editorial</label>
+                        <div class="control">
+                            <input type="text" class="input is-small input-custom" name="editorial" id="editorial" placeholder="Ingresa la editorial">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="editorial" class="label">Imagen (URL)</label>
+                        <div class="control">
+                            <input type="text" class="input is-small input-custom" name="imagen" id="imagen" placeholder="Ingresa el url de la imagen" oninput="ver_imagen()">
+                        </div>
+                        <img id="image-preview" class="image-preview" src="" alt="Vista previa de la imagen">
+                    </div>
+
+                    <div class="field">
+                        <label for="sipnosis" class="label">Sipnosis</label>
+                        <div class="control">
+                            <input type="text" class="input is-small input-custom" name="sipnosis" id="sipnosis" placeholder="Ingresa la sipnosis">
+                        </div>
+                    </div>
+
+
+                    <div class="field">
+                        <label for="status" class="label">Estado</label>
+                        <div class="control">
+                            <div class="select is-small" >
+                                <select name="status" id="status" class="input-custom" required>
+                                    <option value=" "> </option>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Leido">Leido</option>
+                                    <option value="Interesado">Interesado</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="button is-primary input-custom">Agregar libro</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+       // Este código se ejecuta cuando el documento HTML ha sido completamente cargado y listo.
+    $(document).ready(function() {
+        // Añade un evento de escucha al campo de entrada con id "autor" para detectar cuando el usuario escribe en él.
+        $('#autor').on('input', function() {
+            // Obtiene el valor actual del campo de entrada.
+            var query = $(this).val();
+            // Si el usuario ha escrito más de 2 caracteres, realiza una búsqueda.
+            if (query.length > 2) {
+                // Envía una solicitud AJAX al servidor para obtener sugerencias de autores.
+                $.ajax({
+                    url: "/sugerencias_autores",  // URL de la ruta en el servidor que proporciona sugerencias.
+                    method: "GET",  // Método HTTP para la solicitud (GET en este caso).
+                    data: { query: query },  // Datos enviados con la solicitud (la búsqueda del usuario).
+                    success: function(data) {
+                        // Si la solicitud tiene éxito, limpia el contenedor de sugerencias.
+                        $('#suggestions').empty();
+                        // Si hay sugerencias, las muestra en el contenedor.
+                        if (data.length > 0) {
+                            data.forEach(function(autor) {
+                                $('#suggestions').append('<div class="suggestion-item">' + autor[0] + '</div>');
+                            });
+                        } else {
+                            // Si no hay sugerencias, muestra un mensaje indicando que no se encontraron.
+                            $('#suggestions').append('<div class="suggestion-item">No se encontraron sugerencias</div>');
+                        }
+                    },
+                    error: function() {
+                        // Si hay un error en la solicitud, muestra un mensaje de error.
+                        $('#suggestions').empty();
+                        $('#suggestions').append('<div class="suggestion-item">Error al recuperar sugerencias</div>');
+                    }
+                });
+            } else {
+                // Si el usuario ha escrito 2 caracteres o menos, limpia el contenedor de sugerencias.
+                $('#suggestions').empty();
+            }
+        });
+
+        // Añade un evento de escucha para cuando el usuario haga clic en un elemento de sugerencia.
+        $(document).on('click', '.suggestion-item', function() {
+            // Al hacer clic, establece el valor del campo de entrada con el texto de la sugerencia seleccionada.
+            $('#autor').val($(this).text());
+            // Luego, limpia el contenedor de sugerencias.
+            $('#suggestions').empty();
+        });
+    });
+        //Para las sugerencias de editoriales
+
+        $(document).ready(function() {
+            $('#editorial').on('input', function() {
+                var query = $(this).val();
+                if (query.length > 2) {  // Empieza a buscar después de 2 caracteres
+                    $.ajax({
+                        url: "/sugerencias_editoriales",
+                        method: "GET",
+                        data: { query: query },
+                        success: function(data) {
+                            $('#suggestions').empty();
+                            if (data.length > 0) {
+                                data.forEach(function(autor) {
+                                    $('#suggestions').append('<div class="suggestion-item">' + autor[0] + '</div>');
+                                });
+                            } else {
+                                $('#suggestions').append('<div class="suggestion-item">No se encontraron sugerencias</div>');
+                            }
+                        },
+                        error: function() {
+                            $('#suggestions').empty();
+                            $('#suggestions').append('<div class="suggestion-item">Error al recuperar sugerencias</div>');
+                        }
+                    });
+                } else {
+                    $('#suggestions').empty();
+                }
+            });
+
+            // Manejador de clic en las sugerencias
+            $(document).on('click', '.suggestion-item', function() {
+                $('#editorial<').val($(this).text());
+                $('#suggestions').empty();
+            });
+
+            //Para las sugerencias de autores
+
+            document.getElementById('bookForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                let formData = new FormData(this);
+
+                fetch('/procesar_datos', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 200) {
+                        alert(data.message);
+                    } else if (data.status === 409) {
+                        alert(data.message);
+                        window.location.href = data.redirect_url;
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
+
+        
+
+        });
+
+
+        function ver_imagen(){
+            const imageUrl = document.getElementById('imagen').value;
+            const imagePreview = document.getElementById('image-preview');
+            imagePreview.src = imageUrl;
+        }
+
+        function validacion(){
+            var status = document.getElementById("status").value;
+            if (status === "") {
+                abrir_validacion();
+                return false;
+            }
+            return true;
+        }
+
+        function abrir_validacion(){
+            document.getElementById("missing-data-modal").classList.add("is-active");
+        }
+
+        function cerrar_validacion(){
+            document.getElementById("missing-data-modal").classList.remove("is-active");
+        }
+    </script>
+
+   
+</body>
+</html>
+    
+
