@@ -28,7 +28,7 @@ def home(id=None):
          )
 
     
-
+# hOLI 
     #Consulta para generos si hay un filtro de generos 
     if id:
         consulta+="where g.id=%s "
