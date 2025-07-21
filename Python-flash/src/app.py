@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for,jsonify
 import os
-from database import database as db
+from database import db 
 
 template_dir = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 template_dir = os.path.join(template_dir, "src", "templates")
@@ -12,7 +12,8 @@ app = Flask(__name__, template_folder=template_dir)
 def home(id=None):
     id = request.args.get('genero', type=int)
 
-    cursor=db.cursor()
+    conn   = db()          # <<< llama a la función
+    cursor = conn.cursor()
     #Consulta del inicio
     consulta= (
         "SELECT b.id AS book_id, b.name_book AS book, "
